@@ -1,0 +1,56 @@
+<html>
+	<head>
+		<title>BACK IN BLAPCK</title>
+	</head>
+	
+	<body>
+		<audio id="bib" src="bib.ogg" controls></audio>
+		<input type="file" id="input"> </input>
+		<p id="time">0</p>
+		<meter min="0" max="1"></meter>
+	</body>
+	
+	<script language="javascript">
+		/*var reader = new XMLHttpRequest();
+		var url = "http://upload.wikimedia.org/wikipedia/en/4/45/ACDC_-_Back_In_Black-sample.ogg";
+		url = "file:///home/bill/js/level1";
+		reader.open("GET",url,false);
+		reader.send();
+		var str = reader.responseText;
+		var buf = new ArrayBuffer(str.length * 2);
+		var bufView = new Uint32Array(buf);
+		for(var i=0, strLen=str.length; i<strLen; i++) {
+			bufView[i/2] = str.charCodeAt(i);
+		}*/
+
+		var v = document.getElementById("bib");
+		
+		function ready(vuData) {
+			var p = document.getElementById("time");
+
+			var meter = document.getElementsByTagName('meter')[0];
+
+			var max = vuData.reduce(function(a, b) {
+					return Math.max(Math.abs(a), Math.abs(b));
+					}, 0);
+
+			var normalized = vuData.map(function(i) {
+					return Math.abs(i) / max;
+					});
+
+			setInterval(function(){
+				p.textContent = vuData[Math.floor(v.currentTime * 1000)];
+				meter.value = normalized[Math.floor(v.currentTime * 1000)];
+			},1);
+		}
+		
+		var request = new XMLHttpRequest();
+		var url = "file:///home/bill/adv/out.js";
+		request.open("GET", url);
+		request.send();
+		request.addEventListener('load', function() {
+			ready(JSON.parse(this.responseText));
+		});
+
+	</script>
+</html>
